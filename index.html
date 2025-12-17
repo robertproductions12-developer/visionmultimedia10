@@ -14,11 +14,9 @@
         /* --- ESTILOS GENERALES --- */
         :root { 
             --primary: #2962ff; 
-            --primary-glow: rgba(41, 98, 255, 0.6);
             --bg-dark: #050505; 
             --card-bg: #111; 
             --text-main: #ffffff; 
-            --text-sec: #b0b0b0; 
         }
         
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -27,11 +25,10 @@
             background-color: var(--bg-dark); 
             color: var(--text-main); 
             font-family: 'Montserrat', sans-serif; 
-            overflow-x: hidden; 
             padding-bottom: 50px; 
         }
 
-        /* --- MENÚ HAMBURGUESA --- */
+        /* --- 1. MENÚ HAMBURGUESA --- */
         header { 
             padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; 
             position: sticky; top: 0; z-index: 100; 
@@ -49,7 +46,6 @@
             padding-top: 60px; box-shadow: 5px 0 30px rgba(0,0,0,0.5);
         }
         .side-menu.active { transform: translateX(0); }
-        .close-menu { position: absolute; top: 20px; right: 20px; font-size: 24px; cursor: pointer; }
         
         .menu-items { list-style: none; padding: 20px; }
         .menu-items li { margin-bottom: 20px; }
@@ -65,9 +61,9 @@
         }
         .overlay-bg.active { display: block; }
 
-        /* --- SLIDER DE ESTRENOS --- */
+        /* --- 2. SLIDER DE ESTRENOS (3 IMÁGENES) --- */
         .slider-container {
-            position: relative; width: 100%; height: 50vh; min-height: 300px;
+            position: relative; width: 100%; height: 55vh; min-height: 350px;
             overflow: hidden; margin-bottom: 30px;
         }
         .slide {
@@ -81,15 +77,15 @@
             background: linear-gradient(to top, var(--bg-dark), transparent);
         }
         .slide-content {
-            position: absolute; bottom: 40px; left: 5%; z-index: 2; max-width: 600px;
+            position: absolute; bottom: 50px; left: 5%; z-index: 2; max-width: 600px;
         }
         .slide-tag { 
             background: var(--primary); color: white; padding: 5px 10px; 
             font-size: 0.8rem; font-weight: bold; border-radius: 4px; 
         }
-        .slide-title { font-size: 2.5rem; font-weight: 800; margin: 10px 0; line-height: 1; text-transform: uppercase; }
+        .slide-title { font-size: 2.5rem; font-weight: 800; margin: 15px 0; line-height: 1; text-transform: uppercase; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
 
-        /* --- GRID Y CONTENIDO --- */
+        /* --- GRID Y VIDEOS --- */
         .section-title { padding: 0 5%; margin-bottom: 20px; font-size: 1.5rem; border-left: 4px solid var(--primary); padding-left: 15px; }
         
         .grid { 
@@ -102,13 +98,13 @@
             transition: 0.3s; border: 1px solid rgba(255,255,255,0.05);
         }
         .card:hover { transform: translateY(-5px); border-color: var(--primary); }
-        .card-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; }
+        .card-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; }
         .card-content { 
             position: absolute; bottom: 0; left: 0; width: 100%; padding: 15px;
             background: linear-gradient(to top, black, transparent); 
         }
 
-        /* --- MODAL ADMIN MEJORADO --- */
+        /* --- MODAL ADMIN --- */
         .admin-modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.9); z-index: 300; display: none;
@@ -126,20 +122,16 @@
         .tab-btn.active { background: var(--primary); font-weight: bold; }
         
         .upload-section { display: none; }
-        .upload-section.active { display: block; animation: fadeIn 0.3s; }
+        .upload-section.active { display: block; }
         
         input, select, textarea {
             width: 100%; background: #222; border: 1px solid #333; color: white;
             padding: 12px; margin-bottom: 10px; border-radius: 6px; outline: none;
         }
-        .progress-bar { width: 100%; height: 6px; background: #333; margin-top: 10px; border-radius: 3px; overflow: hidden; }
+        
+        /* Barra de progreso */
+        .progress-bar { width: 100%; height: 8px; background: #333; margin-top: 10px; border-radius: 4px; overflow: hidden; display:none; }
         .progress-fill { height: 100%; background: var(--primary); width: 0%; transition: width 0.3s; }
-
-        /* --- FOOTER & CONTACT --- */
-        .info-section { background: #0a0a0a; padding: 60px 5%; margin-top: 60px; border-top: 1px solid #222; }
-        .social-links { display: flex; gap: 15px; margin-top: 20px; }
-        .social-btn { color: white; font-size: 1.5rem; transition: 0.3s; }
-        .social-btn:hover { color: var(--primary); }
 
         /* --- PLAYER --- */
         .player-overlay {
@@ -148,22 +140,23 @@
             display: flex; flex-direction: column;
         }
         .player-overlay.open { transform: translateY(0); }
-        .video-wrapper { flex: 1; display: flex; align-items: center; justify-content: center; }
+        .video-wrapper { flex: 1; display: flex; align-items: center; justify-content: center; background: #000; }
         video { width: 100%; max-height: 80vh; }
         iframe { width: 100%; height: 100%; border: none; }
-
-        @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+        
+        .video-info-box { padding: 20px; background: #111; }
+        .video-info-box h2 { color: var(--primary); margin-bottom: 10px; }
+        .video-info-box p { color: #ccc; font-size: 0.9rem; line-height: 1.5; }
     </style>
 </head>
 <body>
 
-    <!-- MENÚ LATERAL (HAMBURGUESA) -->
+    <!-- MENÚ HAMBURGUESA -->
     <div class="overlay-bg" onclick="toggleMenu()"></div>
     <nav class="side-menu" id="sideMenu">
-        <i class="material-icons close-menu" onclick="toggleMenu()">close</i>
-        <div style="padding: 0 20px 20px;">
+        <div style="padding: 20px; display:flex; justify-content:space-between; align-items:center;">
             <div class="logo">DEP<span>COM</span></div>
-            <p style="font-size:0.8rem; color:#666; margin-top:5px;">Panel de Navegación</p>
+            <i class="material-icons" onclick="toggleMenu()" style="cursor:pointer; color:#666;">close</i>
         </div>
         <ul class="menu-items">
             <li><a href="#" onclick="filterContent('all'); toggleMenu()" class="active"><i class="material-icons">home</i> Inicio</a></li>
@@ -173,7 +166,7 @@
             <li><a href="#" onclick="filterContent('Podcast'); toggleMenu()"><i class="material-icons">mic</i> Podcast</a></li>
             <li><a href="#" onclick="filterContent('Radio'); toggleMenu()"><i class="material-icons">radio</i> Radio Visual</a></li>
             <hr style="border:0; border-top:1px solid #333; margin:15px 0;">
-            <li><a href="#contacto" onclick="toggleMenu()"><i class="material-icons">info</i> Nosotros</a></li>
+            <li><a href="#" onclick="openAdmin(); toggleMenu()"><i class="material-icons">settings</i> Admin</a></li>
         </ul>
     </nav>
 
@@ -181,33 +174,33 @@
     <header>
         <div class="menu-btn" onclick="toggleMenu()"><i class="material-icons">menu</i></div>
         <div class="logo">DEP<span>COM</span></div>
-        <div class="menu-btn" onclick="openAdmin()" style="font-size:24px;"><i class="material-icons">settings</i></div>
+        <div style="width: 28px;"></div> <!-- Espaciador para centrar logo visualmente -->
     </header>
 
-    <!-- SLIDER (ESTRENOS) -->
+    <!-- SLIDER (3 IMÁGENES) -->
     <div class="slider-container">
         <!-- Imagen 1 -->
-        <div class="slide active" style="background-image: url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=1920&auto=format&fit=crop');">
+        <div class="slide active" style="background-image: url('https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?q=80&w=1920&auto=format&fit=crop');">
             <div class="slide-content">
-                <span class="slide-tag">ESTRENO</span>
-                <div class="slide-title">Cinema World</div>
-                <p>Descubre la magia del cine independiente.</p>
+                <span class="slide-tag">ESTRENO EXCLUSIVO</span>
+                <div class="slide-title">Studio Sessions</div>
+                <p>La mejor calidad de sonido en directo.</p>
             </div>
         </div>
         <!-- Imagen 2 -->
-        <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1578022761797-b8636ac1773c?q=80&w=1920&auto=format&fit=crop');">
+        <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=1920&auto=format&fit=crop');">
             <div class="slide-content">
-                <span class="slide-tag">EXCLUSIVO</span>
-                <div class="slide-title">Voces del Podcast</div>
-                <p>Nuevos episodios disponibles ahora.</p>
+                <span class="slide-tag">NUEVO DOCUMENTAL</span>
+                <div class="slide-title">Cinema World</div>
+                <p>Explorando los orígenes del cine moderno.</p>
             </div>
         </div>
         <!-- Imagen 3 -->
-        <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?q=80&w=1920&auto=format&fit=crop');">
+        <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1578022761797-b8636ac1773c?q=80&w=1920&auto=format&fit=crop');">
             <div class="slide-content">
-                <span class="slide-tag">EN VIVO</span>
-                <div class="slide-title">Studio Sessions</div>
-                <p>Transmisiones de alta calidad.</p>
+                <span class="slide-tag">TENDENCIA</span>
+                <div class="slide-title">Voces del Podcast</div>
+                <p>Escucha las historias que cambian el mundo.</p>
             </div>
         </div>
     </div>
@@ -219,30 +212,11 @@
         <p style="color:#666;">Cargando contenido...</p>
     </div>
 
-    <!-- SECCIÓN NOSOTROS -->
-    <section class="info-section" id="contacto">
-        <div style="max-width:1200px; margin:0 auto; display:grid; gap:40px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
-            <div>
-                <h3 style="color:var(--primary); margin-bottom:15px;">Sobre Nosotros</h3>
-                <p style="color:#999; line-height:1.6;">Somos una plataforma líder en distribución de contenido digital. Conectamos creadores con audiencias globales mediante tecnología de streaming de última generación.</p>
-            </div>
-            <div>
-                <h3 style="color:var(--primary); margin-bottom:15px;">Síguenos</h3>
-                <div class="social-links">
-                    <a href="#" class="social-btn"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="social-btn"><i class="fab fa-tiktok"></i></a>
-                    <a href="#" class="social-btn"><i class="fab fa-youtube"></i></a>
-                    <a href="#" class="social-btn"><i class="fab fa-twitter"></i></a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ADMIN MODAL -->
+    <!-- MODAL ADMINISTRADOR -->
     <div class="admin-modal" id="adminModal">
         <div class="admin-box">
             <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
-                <h3>Administrar Contenido</h3>
+                <h3>Panel Admin</h3>
                 <i class="material-icons" onclick="closeAdmin()" style="cursor:pointer;">close</i>
             </div>
 
@@ -253,14 +227,13 @@
                 <button onclick="handleLogin()" style="width:100%; padding:10px; background:var(--primary); color:white; border:none; border-radius:5px; cursor:pointer;">ENTRAR</button>
             </div>
 
-            <!-- SUBIR VIDEO -->
+            <!-- PANEL DE SUBIDA -->
             <div id="uploadView" style="display:none;">
                 <div class="upload-tabs">
-                    <button class="tab-btn active" onclick="switchTab('youtube')">YouTube Link</button>
+                    <button class="tab-btn active" onclick="switchTab('youtube')">Link YouTube</button>
                     <button class="tab-btn" onclick="switchTab('upload')">Subir Archivo</button>
                 </div>
 
-                <!-- Campos Comunes -->
                 <select id="videoCat">
                     <option value="Documentales">Documentales</option>
                     <option value="Cortometrajes">Cortometrajes</option>
@@ -269,27 +242,28 @@
                     <option value="Radio">Radio</option>
                 </select>
 
-                <!-- MODO YOUTUBE -->
+                <!-- 1. YOUTUBE -->
                 <div id="tab-youtube" class="upload-section active">
-                    <input type="text" id="ytUrl" placeholder="Link de YouTube">
-                    <button onclick="saveYoutube()" style="width:100%; padding:10px; background:var(--primary); color:white; border:none; cursor:pointer;">GUARDAR YOUTUBE</button>
+                    <input type="text" id="ytUrl" placeholder="Pegar enlace de YouTube aquí">
+                    <textarea id="ytDesc" rows="3" placeholder="Descripción del video (Opcional)"></textarea>
+                    <button onclick="saveYoutube()" style="width:100%; padding:10px; background:var(--primary); color:white; border:none; cursor:pointer; border-radius:5px;">PUBLICAR LINK</button>
                 </div>
 
-                <!-- MODO UPLOAD -->
+                <!-- 2. SUBIR ARCHIVO (Tu dispositivo) -->
                 <div id="tab-upload" class="upload-section">
                     <input type="text" id="upTitle" placeholder="Título del Video">
-                    <textarea id="upDesc" rows="2" placeholder="Descripción breve..."></textarea>
+                    <textarea id="upDesc" rows="3" placeholder="Descripción del video..."></textarea>
                     
-                    <label style="color:#aaa; font-size:0.8rem;">1. Imagen de Portada (JPG/PNG)</label>
+                    <label style="color:#aaa; font-size:0.8rem; margin-top:10px; display:block;">1. Miniatura (Imagen)</label>
                     <input type="file" id="fileThumb" accept="image/*">
                     
-                    <label style="color:#aaa; font-size:0.8rem;">2. Archivo de Video (MP4)</label>
+                    <label style="color:#aaa; font-size:0.8rem; margin-top:10px; display:block;">2. Video (MP4)</label>
                     <input type="file" id="fileVideo" accept="video/*">
                     
-                    <div class="progress-bar"><div class="progress-fill" id="pBar"></div></div>
-                    <p id="pText" style="text-align:center; font-size:0.8rem; margin-top:5px;"></p>
+                    <div class="progress-bar" id="pBarCont"><div class="progress-fill" id="pBar"></div></div>
+                    <p id="pText" style="text-align:center; font-size:0.8rem; margin-top:5px; color:var(--primary);"></p>
 
-                    <button onclick="uploadFiles()" style="width:100%; margin-top:10px; padding:10px; background:var(--primary); color:white; border:none; cursor:pointer;">SUBIR Y PUBLICAR</button>
+                    <button onclick="uploadFiles()" style="width:100%; margin-top:15px; padding:10px; background:var(--primary); color:white; border:none; cursor:pointer; border-radius:5px;">SUBIR Y PUBLICAR</button>
                 </div>
 
                 <button onclick="logout()" style="width:100%; margin-top:20px; background:none; border:none; color:red; cursor:pointer;">Cerrar Sesión</button>
@@ -299,12 +273,21 @@
 
     <!-- REPRODUCTOR -->
     <div class="player-overlay" id="playerOverlay">
-        <div style="padding:20px; color:white; display:flex; justify-content:space-between;">
+        <div style="padding:15px 20px; color:white; display:flex; justify-content:space-between; align-items:center;">
             <i class="material-icons" onclick="closePlayer()" style="font-size:30px; cursor:pointer;">keyboard_arrow_down</i>
-            <span>REPRODUCTOR</span>
+            <span style="font-weight:bold; letter-spacing:1px;">REPRODUCTOR</span>
             <div style="width:30px"></div>
         </div>
-        <div class="video-wrapper" id="videoWrapper"></div>
+        
+        <div class="video-wrapper" id="videoWrapper">
+            <!-- El video se inyecta aquí -->
+        </div>
+        
+        <!-- Información del video (Título y Descripción) -->
+        <div class="video-info-box">
+            <h2 id="playerTitle">Título del Video</h2>
+            <p id="playerDesc">Descripción del video...</p>
+        </div>
     </div>
 
     <!-- FIREBASE LOGIC -->
@@ -312,10 +295,9 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        // Importamos STORAGE para subir archivos
         import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
-        // --- CONFIGURACIÓN ---
+        // --- TU CONFIGURACIÓN DE FIREBASE ---
         const firebaseConfig = {
              apiKey: "AIzaSyCIB1ZTy62DOmez1RKm8-bGOf9Lb8gA0cA",
              authDomain: "depcom-videos.firebaseapp.com",
@@ -330,40 +312,35 @@
         const auth = getAuth(app);
         const storage = getStorage(app);
 
-        // --- LÓGICA DE UI GLOBAL ---
+        // --- INTERFAZ (UI) ---
         
-        // Menú Hamburguesa
+        // Toggle Menú Hamburguesa
         window.toggleMenu = () => {
             document.getElementById('sideMenu').classList.toggle('active');
             document.querySelector('.overlay-bg').classList.toggle('active');
         };
 
-        // Slider Automático
+        // Slider Automático (3 Imágenes)
         let currentSlide = 0;
         const slides = document.querySelectorAll('.slide');
         setInterval(() => {
             slides[currentSlide].classList.remove('active');
             currentSlide = (currentSlide + 1) % slides.length;
             slides[currentSlide].classList.add('active');
-        }, 5000); // Cambia cada 5 segundos
+        }, 5000);
 
-        // Pestañas del Admin
+        // Pestañas Admin
         window.switchTab = (tab) => {
             document.querySelectorAll('.upload-section').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             document.getElementById('tab-'+tab).classList.add('active');
-            
-            // Highlight button
             const btns = document.querySelectorAll('.tab-btn');
-            if(tab === 'youtube') btns[0].classList.add('active');
-            else btns[1].classList.add('active');
+            if(tab === 'youtube') btns[0].classList.add('active'); else btns[1].classList.add('active');
         };
 
-        // --- LÓGICA DE DATOS ---
-
+        // --- DATOS ---
         let allVideos = [];
         
-        // Leer base de datos
         const q = query(collection(db, "videos"), orderBy("date", "desc"));
         onSnapshot(q, (snapshot) => {
             allVideos = [];
@@ -371,21 +348,19 @@
             window.filterContent('all');
         });
 
-        // Filtrar y Renderizar
         window.filterContent = (category) => {
             const grid = document.getElementById('contentGrid');
             grid.innerHTML = '';
-            
             const filtered = category === 'all' ? allVideos : allVideos.filter(v => v.category === category);
             
-            if(filtered.length === 0) grid.innerHTML = '<p style="padding:20px; color:#666;">Sin contenido aquí.</p>';
+            if(filtered.length === 0) grid.innerHTML = '<p style="padding:20px; color:#666;">No hay videos en esta categoría.</p>';
 
             filtered.forEach(video => {
                 const card = document.createElement('div');
                 card.className = 'card';
                 card.onclick = () => openPlayer(video);
                 
-                // Botón eliminar para admin
+                // Botón borrar solo para admin
                 let delBtn = auth.currentUser ? 
                     `<i class="material-icons" onclick="event.stopPropagation(); deleteVideo('${video.id}')" style="position:absolute; top:10px; right:10px; background:red; color:white; padding:5px; border-radius:50%; z-index:10;">delete</i>` : '';
 
@@ -394,15 +369,14 @@
                     ${delBtn}
                     <div class="card-content">
                         <span style="background:var(--primary); color:white; padding:2px 6px; font-size:0.7rem; border-radius:3px;">${video.category}</span>
-                        <h4 style="margin-top:5px;">${video.title}</h4>
+                        <h4 style="margin-top:5px; color:white;">${video.title}</h4>
                     </div>
                 `;
                 grid.appendChild(card);
             });
         };
 
-        // --- LÓGICA DE ADMIN (AUTH + UPLOAD) ---
-
+        // --- ADMIN & UPLOAD ---
         window.openAdmin = () => document.getElementById('adminModal').classList.add('active');
         window.closeAdmin = () => document.getElementById('adminModal').classList.remove('active');
 
@@ -420,108 +394,144 @@
         window.handleLogin = async () => {
             try {
                 await signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('password').value);
-            } catch(e) { alert("Error login"); }
+            } catch(e) { alert("Error: Revisa tu correo o contraseña"); }
         };
         window.logout = () => signOut(auth);
 
-        // 1. GUARDAR VIDEO DE YOUTUBE
+        // 1. GUARDAR YOUTUBE
         window.saveYoutube = async () => {
             const url = document.getElementById('ytUrl').value;
+            const desc = document.getElementById('ytDesc').value; // Nueva descripción
             const cat = document.getElementById('videoCat').value;
             
             let videoId = "";
             const match = url.match(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/);
             if (match && match[2].length == 11) videoId = match[2];
-            else return alert("Link malo");
+            else return alert("Link de YouTube inválido");
 
+            // Obtener titulo automatico
             const res = await fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${videoId}`);
             const data = await res.json();
 
             await addDoc(collection(db, "videos"), {
                 type: 'youtube',
                 src: videoId,
-                title: data.title,
+                title: data.title || "Video YouTube",
+                description: desc || "Sin descripción",
                 thumb: `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`,
                 category: cat,
                 date: Date.now()
             });
-            alert("Guardado!");
+            alert("Video de YouTube publicado!");
             window.closeAdmin();
         };
 
-        // 2. SUBIR ARCHIVO PROPIO (STORAGE)
+        // 2. SUBIR ARCHIVO DE TU DISPOSITIVO
         window.uploadFiles = async () => {
             const title = document.getElementById('upTitle').value;
+            const desc = document.getElementById('upDesc').value; // Capturar descripción
             const fileThumb = document.getElementById('fileThumb').files[0];
             const fileVideo = document.getElementById('fileVideo').files[0];
             const cat = document.getElementById('videoCat').value;
 
-            if(!title || !fileThumb || !fileVideo) return alert("Faltan datos");
+            if(!title || !fileThumb || !fileVideo) return alert("Por favor completa Título, Imagen y Video");
 
+            // Mostrar barra de progreso
+            const pBarCont = document.getElementById('pBarCont');
             const pBar = document.getElementById('pBar');
             const pText = document.getElementById('pText');
+            pBarCont.style.display = 'block';
 
             try {
                 // A. Subir Miniatura
-                pText.innerText = "Subiendo Portada...";
-                pBar.style.width = "20%";
+                pText.innerText = "Subiendo Imagen de Portada...";
+                pBar.style.width = "10%";
+                
                 const thumbRef = ref(storage, 'thumbs/' + Date.now() + '_' + fileThumb.name);
                 await uploadBytesResumable(thumbRef, fileThumb);
                 const thumbUrl = await getDownloadURL(thumbRef);
+                pBar.style.width = "30%";
 
                 // B. Subir Video
-                pText.innerText = "Subiendo Video (Esto puede tardar)...";
-                pBar.style.width = "50%";
+                pText.innerText = "Subiendo Video (Por favor espera)...";
                 const videoRef = ref(storage, 'videos/' + Date.now() + '_' + fileVideo.name);
                 const uploadTask = uploadBytesResumable(videoRef, fileVideo);
 
                 uploadTask.on('state_changed', 
                     (snapshot) => {
-                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                        pBar.style.width = progress + "%";
+                        // Calculo visual del 30% al 100%
+                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 70; 
+                        pBar.style.width = (30 + progress) + "%";
+                        pText.innerText = `Subiendo Video: ${Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100)}%`;
                     }, 
-                    (error) => alert("Error subiendo video"), 
+                    (error) => {
+                        console.error(error);
+                        alert("Error al subir el video.");
+                    }, 
                     async () => {
-                        // C. Guardar en Base de Datos
+                        // C. Todo subido, guardar en BD
+                        pText.innerText = "Procesando...";
                         const videoUrl = await getDownloadURL(uploadTask.snapshot.ref);
                         
                         await addDoc(collection(db, "videos"), {
                             type: 'file',
-                            src: videoUrl,
+                            src: videoUrl,     // URL del video mp4
                             title: title,
-                            thumb: thumbUrl,
+                            description: desc || "Sin descripción", // Guardamos descripción
+                            thumb: thumbUrl,   // URL de la imagen
                             category: cat,
                             date: Date.now()
                         });
                         
-                        pText.innerText = "¡Completado!";
-                        setTimeout(() => window.closeAdmin(), 1000);
+                        pText.innerText = "¡Publicado con éxito!";
+                        setTimeout(() => {
+                            window.closeAdmin();
+                            // Limpiar formulario
+                            document.getElementById('upTitle').value = '';
+                            document.getElementById('upDesc').value = '';
+                            pBarCont.style.display = 'none';
+                        }, 1500);
                     }
                 );
-            } catch(e) { console.error(e); alert("Error general"); }
+            } catch(e) { 
+                console.error(e); 
+                alert("Ocurrió un error inesperado."); 
+            }
         };
 
         window.deleteVideo = async (id) => {
-            if(confirm("Borrar?")) await deleteDoc(doc(db, "videos", id));
+            if(confirm("¿Estás seguro de eliminar este video?")) await deleteDoc(doc(db, "videos", id));
         };
 
-        // --- REPRODUCTOR HÍBRIDO ---
+        // --- REPRODUCTOR ---
         window.openPlayer = (video) => {
             const wrapper = document.getElementById('videoWrapper');
-            wrapper.innerHTML = '';
+            const titleEl = document.getElementById('playerTitle');
+            const descEl = document.getElementById('playerDesc');
+
+            wrapper.innerHTML = ''; // Limpiar anterior
+            
+            // Poner textos
+            titleEl.innerText = video.title;
+            descEl.innerText = video.description || "Sin descripción disponible.";
 
             if(video.type === 'youtube') {
-                wrapper.innerHTML = `<iframe src="https://www.youtube.com/embed/${video.src}?autoplay=1&rel=0" allow="autoplay" allowfullscreen></iframe>`;
+                wrapper.innerHTML = `<iframe src="https://www.youtube.com/embed/${video.src}?autoplay=1&rel=0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
             } else {
-                // Video propio (HTML5)
-                wrapper.innerHTML = `<video src="${video.src}" controls autoplay playsinline></video>`;
+                // Video subido (HTML5)
+                wrapper.innerHTML = `
+                    <video controls autoplay playsinline controlsList="nodownload">
+                        <source src="${video.src}" type="video/mp4">
+                        Tu navegador no soporta video HTML5.
+                    </video>
+                `;
             }
             document.getElementById('playerOverlay').classList.add('open');
         };
 
         window.closePlayer = () => {
             document.getElementById('playerOverlay').classList.remove('open');
-            document.getElementById('videoWrapper').innerHTML = '';
+            document.getElementById('videoWrapper').innerHTML = ''; // Detener reproducción
         };
 
     </script>
