@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&display=swap" rel="stylesheet">
     
     <style>
-        /* --- CORE STYLES --- */
+        /* --- ESTILOS GENERALES --- */
         :root { 
             --primary: #2962ff; 
             --primary-glow: rgba(41, 98, 255, 0.6);
@@ -31,443 +31,498 @@
             padding-bottom: 50px; 
         }
 
-        /* Scrollbar Personalizado */
-        ::-webkit-scrollbar { width: 8px; background: #000; }
-        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
-
-        /* Fondo Animado */
-        .background-fx { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; 
-            background: radial-gradient(circle at 50% 120%, #1a237e, #000 60%);
-            animation: pulse 10s infinite alternate;
-        }
-        @keyframes pulse { 0% { opacity: 0.5; } 100% { opacity: 0.8; } }
-
-        /* HEADER & NAV */
+        /* --- MENÚ HAMBURGUESA --- */
         header { 
-            padding: 15px 5%; 
-            display: flex; justify-content: space-between; align-items: center; 
+            padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; 
             position: sticky; top: 0; z-index: 100; 
-            background: rgba(5, 5, 5, 0.9); backdrop-filter: blur(10px); 
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            background: rgba(5, 5, 5, 0.95); backdrop-filter: blur(10px); 
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
-        .logo { font-weight: 900; font-size: 1.6rem; letter-spacing: -1px; color: #fff; }
-        .logo span { color: var(--primary); text-shadow: 0 0 15px var(--primary); }
+        .menu-btn { font-size: 28px; cursor: pointer; color: white; }
+        .logo { font-weight: 900; font-size: 1.6rem; letter-spacing: -1px; }
+        .logo span { color: var(--primary); }
 
-        /* CATEGORY MENU (SCROLL HORIZONTAL) */
-        .category-bar {
-            display: flex; gap: 15px; overflow-x: auto; padding: 15px 5%;
-            background: rgba(0,0,0,0.5); white-space: nowrap;
-            scrollbar-width: none; /* Firefox */
+        .side-menu {
+            position: fixed; top: 0; left: 0; width: 280px; height: 100%;
+            background: #111; z-index: 200; transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out; border-right: 1px solid #333;
+            padding-top: 60px; box-shadow: 5px 0 30px rgba(0,0,0,0.5);
         }
-        .category-bar::-webkit-scrollbar { display: none; } /* Chrome */
+        .side-menu.active { transform: translateX(0); }
+        .close-menu { position: absolute; top: 20px; right: 20px; font-size: 24px; cursor: pointer; }
         
-        .cat-chip {
-            padding: 8px 20px; border-radius: 20px; background: #1a1a1a; 
-            color: #aaa; font-size: 0.85rem; font-weight: 600; cursor: pointer;
-            transition: 0.3s; border: 1px solid transparent;
+        .menu-items { list-style: none; padding: 20px; }
+        .menu-items li { margin-bottom: 20px; }
+        .menu-items a { 
+            color: #ccc; text-decoration: none; font-size: 1.1rem; font-weight: 500; 
+            display: flex; align-items: center; gap: 15px; transition: 0.3s;
         }
-        .cat-chip:hover { color: white; background: #222; }
-        .cat-chip.active { 
-            background: var(--primary); color: white; 
-            box-shadow: 0 0 15px var(--primary-glow); border-color: var(--primary);
+        .menu-items a:hover, .menu-items a.active { color: var(--primary); padding-left: 10px; }
+
+        .overlay-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); z-index: 150; display: none;
         }
+        .overlay-bg.active { display: block; }
 
-        /* HERO SECTION */
-        .hero { padding: 40px 5% 20px; text-align: center; }
-        .hero h1 { font-size: 2.5rem; margin-bottom: 10px; line-height: 1.1; }
-        .hero p { color: var(--text-sec); font-size: 1rem; max-width: 600px; margin: 0 auto 30px; }
+        /* --- SLIDER DE ESTRENOS --- */
+        .slider-container {
+            position: relative; width: 100%; height: 50vh; min-height: 300px;
+            overflow: hidden; margin-bottom: 30px;
+        }
+        .slide {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            opacity: 0; transition: opacity 1s ease-in-out;
+            background-size: cover; background-position: center;
+        }
+        .slide.active { opacity: 1; }
+        .slide::after {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to top, var(--bg-dark), transparent);
+        }
+        .slide-content {
+            position: absolute; bottom: 40px; left: 5%; z-index: 2; max-width: 600px;
+        }
+        .slide-tag { 
+            background: var(--primary); color: white; padding: 5px 10px; 
+            font-size: 0.8rem; font-weight: bold; border-radius: 4px; 
+        }
+        .slide-title { font-size: 2.5rem; font-weight: 800; margin: 10px 0; line-height: 1; text-transform: uppercase; }
 
-        /* GRID SYSTEM */
+        /* --- GRID Y CONTENIDO --- */
+        .section-title { padding: 0 5%; margin-bottom: 20px; font-size: 1.5rem; border-left: 4px solid var(--primary); padding-left: 15px; }
+        
         .grid { 
             display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
-            gap: 30px; padding: 20px 5%; min-height: 400px; 
+            gap: 25px; padding: 0 5%; 
         }
-
-        /* VIDEO CARD PRO */
         .card { 
             background: var(--card-bg); border-radius: 12px; overflow: hidden; 
-            position: relative; height: 340px; cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            border: 1px solid rgba(255,255,255,0.05);
+            position: relative; height: 320px; cursor: pointer;
+            transition: 0.3s; border: 1px solid rgba(255,255,255,0.05);
         }
-        .card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.5); border-color: var(--primary); }
-        
-        .card-img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; opacity: 0.7; }
-        .card:hover .card-img { transform: scale(1.1); opacity: 0.4; }
-        
+        .card:hover { transform: translateY(-5px); border-color: var(--primary); }
+        .card-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; }
         .card-content { 
-            position: absolute; bottom: 0; left: 0; width: 100%; padding: 20px;
-            background: linear-gradient(to top, #000 10%, transparent); 
+            position: absolute; bottom: 0; left: 0; width: 100%; padding: 15px;
+            background: linear-gradient(to top, black, transparent); 
         }
-        .card-tag { 
-            background: var(--primary); color: white; padding: 3px 8px; 
-            font-size: 0.6rem; border-radius: 4px; font-weight: 800; 
-            text-transform: uppercase; display: inline-block; margin-bottom: 8px;
-        }
-        .card-title { font-size: 1.1rem; font-weight: 700; line-height: 1.3; margin-bottom: 5px; }
-        .play-icon {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.5);
-            font-size: 3rem; color: white; opacity: 0; transition: 0.3s;
-            text-shadow: 0 0 20px black;
-        }
-        .card:hover .play-icon { opacity: 1; transform: translate(-50%, -50%) scale(1); }
 
-        /* NOSOTROS & CONTACTO */
-        .info-section {
-            background: #0a0a0a; padding: 60px 5%; margin-top: 50px;
-            border-top: 1px solid #222;
-        }
-        .info-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px;
-        }
-        .info-box h3 { color: var(--primary); margin-bottom: 15px; font-size: 1.5rem; }
-        .info-box p { color: #888; line-height: 1.6; font-size: 0.95rem; }
-        
-        .social-links { display: flex; gap: 15px; margin-top: 20px; }
-        .social-btn {
-            width: 40px; height: 40px; border-radius: 50%; background: #222;
-            display: flex; align-items: center; justify-content: center;
-            color: white; text-decoration: none; transition: 0.3s;
-            font-size: 1.2rem;
-        }
-        .social-btn:hover { background: var(--primary); transform: translateY(-3px); }
-
-        /* FOOTER */
-        footer { text-align: center; padding: 30px; color: #555; font-size: 0.8rem; background: #000; }
-
-        /* ADMIN MODAL */
+        /* --- MODAL ADMIN MEJORADO --- */
         .admin-modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9); backdrop-filter: blur(5px);
-            z-index: 200; display: flex; align-items: center; justify-content: center;
-            opacity: 0; pointer-events: none; transition: 0.3s;
+            background: rgba(0,0,0,0.9); z-index: 300; display: none;
+            align-items: center; justify-content: center; backdrop-filter: blur(5px);
         }
-        .admin-modal.active { opacity: 1; pointer-events: all; }
+        .admin-modal.active { display: flex; }
         .admin-box {
-            background: #151515; width: 90%; max-width: 450px; padding: 30px;
-            border-radius: 15px; border: 1px solid #333; position: relative;
+            background: #151515; width: 90%; max-width: 500px; padding: 30px;
+            border-radius: 15px; border: 1px solid #333; max-height: 90vh; overflow-y: auto;
         }
-        .close-btn { position: absolute; top: 15px; right: 15px; cursor: pointer; color: #666; }
         
-        input, select {
+        /* Pestañas de subida */
+        .upload-tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tab-btn { flex: 1; padding: 10px; background: #222; border: none; color: white; cursor: pointer; border-radius: 5px; }
+        .tab-btn.active { background: var(--primary); font-weight: bold; }
+        
+        .upload-section { display: none; }
+        .upload-section.active { display: block; animation: fadeIn 0.3s; }
+        
+        input, select, textarea {
             width: 100%; background: #222; border: 1px solid #333; color: white;
-            padding: 12px; margin-bottom: 15px; border-radius: 6px; outline: none;
+            padding: 12px; margin-bottom: 10px; border-radius: 6px; outline: none;
         }
-        input:focus, select:focus { border-color: var(--primary); }
-        
-        .btn-primary {
-            width: 100%; background: var(--primary); border: none; padding: 12px;
-            color: white; font-weight: bold; border-radius: 6px; cursor: pointer;
-        }
-        .btn-primary:hover { background: #1a4bd6; }
-        
-        .admin-float-btn {
-            position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px;
-            background: #222; border-radius: 50%; display: flex; align-items: center; 
-            justify-content: center; cursor: pointer; border: 1px solid #333; z-index: 90;
-            opacity: 0.3; transition: 0.3s;
-        }
-        .admin-float-btn:hover { opacity: 1; border-color: var(--primary); }
+        .progress-bar { width: 100%; height: 6px; background: #333; margin-top: 10px; border-radius: 3px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--primary); width: 0%; transition: width 0.3s; }
 
-        /* VIDEO PLAYER */
+        /* --- FOOTER & CONTACT --- */
+        .info-section { background: #0a0a0a; padding: 60px 5%; margin-top: 60px; border-top: 1px solid #222; }
+        .social-links { display: flex; gap: 15px; margin-top: 20px; }
+        .social-btn { color: white; font-size: 1.5rem; transition: 0.3s; }
+        .social-btn:hover { color: var(--primary); }
+
+        /* --- PLAYER --- */
         .player-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #000; z-index: 300; display: flex; flex-direction: column;
-            transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+            background: black; z-index: 400; transform: translateY(100%); transition: 0.3s;
+            display: flex; flex-direction: column;
         }
         .player-overlay.open { transform: translateY(0); }
-        .iframe-container { flex: 1; width: 100%; display: flex; align-items: center; justify-content: center; }
-        .iframe-container iframe { width: 100%; height: 100%; max-width: 1200px; max-height: 80vh; border:none; }
-        .player-controls { padding: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .video-wrapper { flex: 1; display: flex; align-items: center; justify-content: center; }
+        video { width: 100%; max-height: 80vh; }
+        iframe { width: 100%; height: 100%; border: none; }
 
+        @keyframes fadeIn { from{opacity:0} to{opacity:1} }
     </style>
 </head>
 <body>
 
-    <div class="background-fx"></div>
+    <!-- MENÚ LATERAL (HAMBURGUESA) -->
+    <div class="overlay-bg" onclick="toggleMenu()"></div>
+    <nav class="side-menu" id="sideMenu">
+        <i class="material-icons close-menu" onclick="toggleMenu()">close</i>
+        <div style="padding: 0 20px 20px;">
+            <div class="logo">DEP<span>COM</span></div>
+            <p style="font-size:0.8rem; color:#666; margin-top:5px;">Panel de Navegación</p>
+        </div>
+        <ul class="menu-items">
+            <li><a href="#" onclick="filterContent('all'); toggleMenu()" class="active"><i class="material-icons">home</i> Inicio</a></li>
+            <li><a href="#" onclick="filterContent('Documentales'); toggleMenu()"><i class="material-icons">movie</i> Documentales</a></li>
+            <li><a href="#" onclick="filterContent('Cortometrajes'); toggleMenu()"><i class="material-icons">videocam</i> Cortometrajes</a></li>
+            <li><a href="#" onclick="filterContent('Programas'); toggleMenu()"><i class="material-icons">tv</i> Programas</a></li>
+            <li><a href="#" onclick="filterContent('Podcast'); toggleMenu()"><i class="material-icons">mic</i> Podcast</a></li>
+            <li><a href="#" onclick="filterContent('Radio'); toggleMenu()"><i class="material-icons">radio</i> Radio Visual</a></li>
+            <hr style="border:0; border-top:1px solid #333; margin:15px 0;">
+            <li><a href="#contacto" onclick="toggleMenu()"><i class="material-icons">info</i> Nosotros</a></li>
+        </ul>
+    </nav>
 
     <!-- HEADER -->
     <header>
+        <div class="menu-btn" onclick="toggleMenu()"><i class="material-icons">menu</i></div>
         <div class="logo">DEP<span>COM</span></div>
-        <!-- Enlaces directos a redes en el header (opcional) -->
-        <div style="display:flex; gap:10px;">
-            <a href="https://instagram.com" target="_blank" style="color:white;"><i class="fab fa-instagram"></i></a>
-            <a href="https://youtube.com" target="_blank" style="color:white;"><i class="fab fa-youtube"></i></a>
-        </div>
+        <div class="menu-btn" onclick="openAdmin()" style="font-size:24px;"><i class="material-icons">settings</i></div>
     </header>
 
-    <!-- MENÚ DE CATEGORÍAS -->
-    <div class="category-bar" id="categoryBar">
-        <div class="cat-chip active" onclick="filterContent('all', this)">Todo</div>
-        <div class="cat-chip" onclick="filterContent('Documentales', this)">Documentales</div>
-        <div class="cat-chip" onclick="filterContent('Cortometrajes', this)">Cortometrajes</div>
-        <div class="cat-chip" onclick="filterContent('Programas', this)">Programas</div>
-        <div class="cat-chip" onclick="filterContent('Transmisiones', this)">Transmisiones</div>
-        <div class="cat-chip" onclick="filterContent('Podcast', this)">Podcast</div>
-        <div class="cat-chip" onclick="filterContent('Radio', this)">Radio Visual</div>
-    </div>
-
-    <!-- HERO -->
-    <div class="hero">
-        <h1>Historias que <br><span style="color:var(--primary)">Conectan</span></h1>
-        <p>La plataforma definitiva de streaming multimedia.</p>
-    </div>
-
-    <!-- GRID DE CONTENIDO -->
-    <div class="grid" id="contentGrid">
-        <p style="text-align:center; width:100%; color:#555;">Cargando contenido...</p>
-    </div>
-
-    <!-- SECCIÓN NOSOTROS / CONTACTO -->
-    <section class="info-section">
-        <div class="info-grid">
-            <div class="info-box">
-                <h3>Sobre DepCom</h3>
-                <p>Somos una productora audiovisual dedicada a contar historias con impacto. Desde documentales profundos hasta entretenimiento ligero, DepCom conecta creadores con audiencias globales a través de tecnología de streaming de vanguardia.</p>
+    <!-- SLIDER (ESTRENOS) -->
+    <div class="slider-container">
+        <!-- Imagen 1 -->
+        <div class="slide active" style="background-image: url('https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=1920&auto=format&fit=crop');">
+            <div class="slide-content">
+                <span class="slide-tag">ESTRENO</span>
+                <div class="slide-title">Cinema World</div>
+                <p>Descubre la magia del cine independiente.</p>
             </div>
-            <div class="info-box">
-                <h3>Conecta con Nosotros</h3>
-                <p>¿Tienes un proyecto? ¿Quieres publicitar con nosotros?</p>
-                <p>📧 contacto@depcom.com</p>
+        </div>
+        <!-- Imagen 2 -->
+        <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1578022761797-b8636ac1773c?q=80&w=1920&auto=format&fit=crop');">
+            <div class="slide-content">
+                <span class="slide-tag">EXCLUSIVO</span>
+                <div class="slide-title">Voces del Podcast</div>
+                <p>Nuevos episodios disponibles ahora.</p>
+            </div>
+        </div>
+        <!-- Imagen 3 -->
+        <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?q=80&w=1920&auto=format&fit=crop');">
+            <div class="slide-content">
+                <span class="slide-tag">EN VIVO</span>
+                <div class="slide-title">Studio Sessions</div>
+                <p>Transmisiones de alta calidad.</p>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="section-title">Catálogo</h2>
+    
+    <!-- GRID DE VIDEOS -->
+    <div class="grid" id="contentGrid">
+        <p style="color:#666;">Cargando contenido...</p>
+    </div>
+
+    <!-- SECCIÓN NOSOTROS -->
+    <section class="info-section" id="contacto">
+        <div style="max-width:1200px; margin:0 auto; display:grid; gap:40px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+            <div>
+                <h3 style="color:var(--primary); margin-bottom:15px;">Sobre Nosotros</h3>
+                <p style="color:#999; line-height:1.6;">Somos una plataforma líder en distribución de contenido digital. Conectamos creadores con audiencias globales mediante tecnología de streaming de última generación.</p>
+            </div>
+            <div>
+                <h3 style="color:var(--primary); margin-bottom:15px;">Síguenos</h3>
                 <div class="social-links">
                     <a href="#" class="social-btn"><i class="fab fa-instagram"></i></a>
                     <a href="#" class="social-btn"><i class="fab fa-tiktok"></i></a>
                     <a href="#" class="social-btn"><i class="fab fa-youtube"></i></a>
-                    <a href="#" class="social-btn"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="social-btn"><i class="fab fa-twitter"></i></a> <!-- X icon -->
+                    <a href="#" class="social-btn"><i class="fab fa-twitter"></i></a>
                 </div>
             </div>
         </div>
     </section>
 
-    <footer>
-        © 2024 DepCom Streaming & Media. Todos los derechos reservados.
-    </footer>
-
-    <!-- BOTÓN FLOTANTE ADMIN -->
-    <div class="admin-float-btn" onclick="openAdmin()">
-        <i class="material-icons" style="color:white;">settings</i>
-    </div>
-
-    <!-- MODAL ADMIN -->
+    <!-- ADMIN MODAL -->
     <div class="admin-modal" id="adminModal">
         <div class="admin-box">
-            <i class="material-icons close-btn" onclick="closeAdmin()">close</i>
-            
-            <!-- VISTA LOGIN -->
-            <div id="loginView">
-                <h3 style="color:var(--primary); margin-bottom:20px; text-align:center;">Acceso Creadores</h3>
-                <input type="email" id="email" placeholder="Correo administrativo">
-                <input type="password" id="password" placeholder="Contraseña">
-                <button class="btn-primary" onclick="handleLogin()">ENTRAR AL SISTEMA</button>
+            <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
+                <h3>Administrar Contenido</h3>
+                <i class="material-icons" onclick="closeAdmin()" style="cursor:pointer;">close</i>
             </div>
 
-            <!-- VISTA SUBIR VIDEO -->
+            <!-- LOGIN -->
+            <div id="loginView">
+                <input type="email" id="email" placeholder="Correo admin">
+                <input type="password" id="password" placeholder="Contraseña">
+                <button onclick="handleLogin()" style="width:100%; padding:10px; background:var(--primary); color:white; border:none; border-radius:5px; cursor:pointer;">ENTRAR</button>
+            </div>
+
+            <!-- SUBIR VIDEO -->
             <div id="uploadView" style="display:none;">
-                <h3 style="color:var(--primary); margin-bottom:10px;">Publicar Contenido</h3>
-                
-                <label style="font-size:0.8rem; color:#888;">Categoría</label>
-                <select id="videoCategory">
+                <div class="upload-tabs">
+                    <button class="tab-btn active" onclick="switchTab('youtube')">YouTube Link</button>
+                    <button class="tab-btn" onclick="switchTab('upload')">Subir Archivo</button>
+                </div>
+
+                <!-- Campos Comunes -->
+                <select id="videoCat">
                     <option value="Documentales">Documentales</option>
                     <option value="Cortometrajes">Cortometrajes</option>
                     <option value="Programas">Programas</option>
-                    <option value="Transmisiones">Transmisiones</option>
                     <option value="Podcast">Podcast</option>
-                    <option value="Radio">Radio Visual</option>
+                    <option value="Radio">Radio</option>
                 </select>
 
-                <label style="font-size:0.8rem; color:#888;">Enlace de YouTube</label>
-                <input type="text" id="videoUrl" placeholder="https://youtu.be/...">
+                <!-- MODO YOUTUBE -->
+                <div id="tab-youtube" class="upload-section active">
+                    <input type="text" id="ytUrl" placeholder="Link de YouTube">
+                    <button onclick="saveYoutube()" style="width:100%; padding:10px; background:var(--primary); color:white; border:none; cursor:pointer;">GUARDAR YOUTUBE</button>
+                </div>
 
-                <button class="btn-primary" id="btnUpload" onclick="uploadVideo()">PUBLICAR AHORA</button>
-                <button onclick="logout()" style="background:none; border:none; color:red; margin-top:10px; cursor:pointer; width:100%;">Cerrar Sesión</button>
-                
-                <p id="statusMsg" style="text-align:center; font-size:0.8rem; margin-top:10px; color:#aaa;"></p>
+                <!-- MODO UPLOAD -->
+                <div id="tab-upload" class="upload-section">
+                    <input type="text" id="upTitle" placeholder="Título del Video">
+                    <textarea id="upDesc" rows="2" placeholder="Descripción breve..."></textarea>
+                    
+                    <label style="color:#aaa; font-size:0.8rem;">1. Imagen de Portada (JPG/PNG)</label>
+                    <input type="file" id="fileThumb" accept="image/*">
+                    
+                    <label style="color:#aaa; font-size:0.8rem;">2. Archivo de Video (MP4)</label>
+                    <input type="file" id="fileVideo" accept="video/*">
+                    
+                    <div class="progress-bar"><div class="progress-fill" id="pBar"></div></div>
+                    <p id="pText" style="text-align:center; font-size:0.8rem; margin-top:5px;"></p>
+
+                    <button onclick="uploadFiles()" style="width:100%; margin-top:10px; padding:10px; background:var(--primary); color:white; border:none; cursor:pointer;">SUBIR Y PUBLICAR</button>
+                </div>
+
+                <button onclick="logout()" style="width:100%; margin-top:20px; background:none; border:none; color:red; cursor:pointer;">Cerrar Sesión</button>
             </div>
         </div>
     </div>
 
     <!-- REPRODUCTOR -->
     <div class="player-overlay" id="playerOverlay">
-        <div class="player-controls">
-            <i class="material-icons" style="font-size:30px; color:white; cursor:pointer;" onclick="closePlayer()">keyboard_arrow_down</i>
-            <span style="color:var(--primary); font-weight:bold;">REPRODUCIENDO</span>
-            <div style="width:30px;"></div>
+        <div style="padding:20px; color:white; display:flex; justify-content:space-between;">
+            <i class="material-icons" onclick="closePlayer()" style="font-size:30px; cursor:pointer;">keyboard_arrow_down</i>
+            <span>REPRODUCTOR</span>
+            <div style="width:30px"></div>
         </div>
-        <div class="iframe-container" id="iframeContainer"></div>
+        <div class="video-wrapper" id="videoWrapper"></div>
     </div>
 
-    <!-- JAVASCRIPT (LÓGICA) -->
+    <!-- FIREBASE LOGIC -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        // Importamos STORAGE para subir archivos
+        import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
-        // --- CONFIGURACIÓN (REEMPLAZA ESTO CON TUS DATOS DE FIREBASE) ---
+        // --- CONFIGURACIÓN ---
         const firebaseConfig = {
-                     apiKey: "AIzaSyCIB1ZTy62DOmez1RKm8-bGOf9Lb8gA0cA",
-                     authDomain: "depcom-videos.firebaseapp.com",
-                     projectId: "depcom-videos",
-                     storageBucket: "depcom-videos.firebasestorage.app",
-                     messagingSenderId: "305553483794",
-                     appId: "1:305553483794:web:d012684a8631bd453b50cb"
+             apiKey: "AIzaSyCIB1ZTy62DOmez1RKm8-bGOf9Lb8gA0cA",
+             authDomain: "depcom-videos.firebaseapp.com",
+             projectId: "depcom-videos",
+             storageBucket: "depcom-videos.firebasestorage.app",
+             messagingSenderId: "305553483794",
+             appId: "1:305553483794:web:d012684a8631bd453b50cb"
         };
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
+        const storage = getStorage(app);
 
-        // Variables de Estado
-        let allVideos = [];
-        let currentFilter = 'all';
-
-        // --- 1. LECTURA DE DATOS ---
-        const q = query(collection(db, "videos"), orderBy("date", "desc"));
+        // --- LÓGICA DE UI GLOBAL ---
         
+        // Menú Hamburguesa
+        window.toggleMenu = () => {
+            document.getElementById('sideMenu').classList.toggle('active');
+            document.querySelector('.overlay-bg').classList.toggle('active');
+        };
+
+        // Slider Automático
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        setInterval(() => {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % slides.length;
+            slides[currentSlide].classList.add('active');
+        }, 5000); // Cambia cada 5 segundos
+
+        // Pestañas del Admin
+        window.switchTab = (tab) => {
+            document.querySelectorAll('.upload-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('tab-'+tab).classList.add('active');
+            
+            // Highlight button
+            const btns = document.querySelectorAll('.tab-btn');
+            if(tab === 'youtube') btns[0].classList.add('active');
+            else btns[1].classList.add('active');
+        };
+
+        // --- LÓGICA DE DATOS ---
+
+        let allVideos = [];
+        
+        // Leer base de datos
+        const q = query(collection(db, "videos"), orderBy("date", "desc"));
         onSnapshot(q, (snapshot) => {
             allVideos = [];
-            snapshot.forEach(doc => {
-                allVideos.push({ id: doc.id, ...doc.data() });
-            });
-            renderGrid();
+            snapshot.forEach(doc => allVideos.push({ id: doc.id, ...doc.data() }));
+            window.filterContent('all');
         });
 
-        // --- 2. RENDERIZADO (CON FILTRO) ---
-        window.renderGrid = () => {
+        // Filtrar y Renderizar
+        window.filterContent = (category) => {
             const grid = document.getElementById('contentGrid');
             grid.innerHTML = '';
-
-            const filtered = currentFilter === 'all' 
-                ? allVideos 
-                : allVideos.filter(v => v.category === currentFilter);
-
-            if(filtered.length === 0) {
-                grid.innerHTML = '<p style="grid-column:1/-1; text-align:center; color:#555;">No hay contenido en esta categoría.</p>';
-                return;
-            }
+            
+            const filtered = category === 'all' ? allVideos : allVideos.filter(v => v.category === category);
+            
+            if(filtered.length === 0) grid.innerHTML = '<p style="padding:20px; color:#666;">Sin contenido aquí.</p>';
 
             filtered.forEach(video => {
                 const card = document.createElement('div');
                 card.className = 'card';
-                card.onclick = () => playVideo(video.youtubeId);
-
-                // Botón borrar solo para admin
-                let deleteHtml = '';
-                if(auth.currentUser) {
-                    deleteHtml = `<button onclick="event.stopPropagation(); deleteItem('${video.id}')" style="position:absolute; top:10px; right:10px; background:red; color:white; border:none; padding:5px; border-radius:50%; z-index:10; cursor:pointer;"><i class="material-icons">delete</i></button>`;
-                }
+                card.onclick = () => openPlayer(video);
+                
+                // Botón eliminar para admin
+                let delBtn = auth.currentUser ? 
+                    `<i class="material-icons" onclick="event.stopPropagation(); deleteVideo('${video.id}')" style="position:absolute; top:10px; right:10px; background:red; color:white; padding:5px; border-radius:50%; z-index:10;">delete</i>` : '';
 
                 card.innerHTML = `
-                    <img src="${video.img}" class="card-img" alt="cover">
-                    <i class="material-icons play-icon">play_circle_outline</i>
-                    ${deleteHtml}
+                    <img src="${video.thumb}" class="card-img">
+                    ${delBtn}
                     <div class="card-content">
-                        <span class="card-tag">${video.category || 'General'}</span>
-                        <div class="card-title">${video.title}</div>
+                        <span style="background:var(--primary); color:white; padding:2px 6px; font-size:0.7rem; border-radius:3px;">${video.category}</span>
+                        <h4 style="margin-top:5px;">${video.title}</h4>
                     </div>
                 `;
                 grid.appendChild(card);
             });
-        }
+        };
 
-        // --- 3. FUNCIONES DE FILTRO ---
-        window.filterContent = (cat, element) => {
-            currentFilter = cat;
-            
-            // Actualizar estilo visual de los chips
-            document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
-            element.classList.add('active');
-            
-            renderGrid();
-        }
+        // --- LÓGICA DE ADMIN (AUTH + UPLOAD) ---
 
-        // --- 4. FUNCIONES ADMIN ---
         window.openAdmin = () => document.getElementById('adminModal').classList.add('active');
         window.closeAdmin = () => document.getElementById('adminModal').classList.remove('active');
 
-        // Escuchar estado de login
         onAuthStateChanged(auth, (user) => {
             if(user) {
                 document.getElementById('loginView').style.display = 'none';
                 document.getElementById('uploadView').style.display = 'block';
-                renderGrid(); // Re-renderizar para mostrar botones de borrar
+                window.filterContent('all'); // Refrescar para ver botones de borrar
             } else {
                 document.getElementById('loginView').style.display = 'block';
                 document.getElementById('uploadView').style.display = 'none';
-                renderGrid(); // Re-renderizar para ocultar botones de borrar
             }
         });
 
         window.handleLogin = async () => {
-            const email = document.getElementById('email').value;
-            const pass = document.getElementById('password').value;
             try {
-                await signInWithEmailAndPassword(auth, email, pass);
-            } catch(e) {
-                alert("Error: " + e.message);
-            }
+                await signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('password').value);
+            } catch(e) { alert("Error login"); }
         };
-
         window.logout = () => signOut(auth);
 
-        window.uploadVideo = async () => {
-            const url = document.getElementById('videoUrl').value;
-            const category = document.getElementById('videoCategory').value;
-            const status = document.getElementById('statusMsg');
-
-            if(!url) return;
+        // 1. GUARDAR VIDEO DE YOUTUBE
+        window.saveYoutube = async () => {
+            const url = document.getElementById('ytUrl').value;
+            const cat = document.getElementById('videoCat').value;
             
-            // Extraer ID Youtube
             let videoId = "";
             const match = url.match(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/);
             if (match && match[2].length == 11) videoId = match[2];
-            else { alert("Link inválido"); return; }
+            else return alert("Link malo");
 
-            status.innerText = "Obteniendo info...";
-            
-            try {
-                // Fetch info (sin API key)
-                const res = await fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${videoId}`);
-                const data = await res.json();
+            const res = await fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${videoId}`);
+            const data = await res.json();
 
-                await addDoc(collection(db, "videos"), {
-                    youtubeId: videoId,
-                    title: data.title || "Nuevo Video",
-                    img: `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`, // Mejor calidad de imagen
-                    category: category,
-                    date: Date.now()
-                });
-
-                status.innerText = "¡Publicado!";
-                document.getElementById('videoUrl').value = "";
-                setTimeout(() => { status.innerText = ""; window.closeAdmin(); }, 1500);
-
-            } catch(e) {
-                status.innerText = "Error al subir";
-                console.error(e);
-            }
+            await addDoc(collection(db, "videos"), {
+                type: 'youtube',
+                src: videoId,
+                title: data.title,
+                thumb: `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`,
+                category: cat,
+                date: Date.now()
+            });
+            alert("Guardado!");
+            window.closeAdmin();
         };
 
-        window.deleteItem = async (id) => {
-            if(confirm("¿Eliminar este contenido?")) {
-                await deleteDoc(doc(db, "videos", id));
-            }
-        }
+        // 2. SUBIR ARCHIVO PROPIO (STORAGE)
+        window.uploadFiles = async () => {
+            const title = document.getElementById('upTitle').value;
+            const fileThumb = document.getElementById('fileThumb').files[0];
+            const fileVideo = document.getElementById('fileVideo').files[0];
+            const cat = document.getElementById('videoCat').value;
 
-        // --- 5. REPRODUCTOR ---
-        window.playVideo = (id) => {
-            document.getElementById('iframeContainer').innerHTML = 
-                `<iframe src="https://www.youtube.com/embed/${id}?autoplay=1&modestbranding=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+            if(!title || !fileThumb || !fileVideo) return alert("Faltan datos");
+
+            const pBar = document.getElementById('pBar');
+            const pText = document.getElementById('pText');
+
+            try {
+                // A. Subir Miniatura
+                pText.innerText = "Subiendo Portada...";
+                pBar.style.width = "20%";
+                const thumbRef = ref(storage, 'thumbs/' + Date.now() + '_' + fileThumb.name);
+                await uploadBytesResumable(thumbRef, fileThumb);
+                const thumbUrl = await getDownloadURL(thumbRef);
+
+                // B. Subir Video
+                pText.innerText = "Subiendo Video (Esto puede tardar)...";
+                pBar.style.width = "50%";
+                const videoRef = ref(storage, 'videos/' + Date.now() + '_' + fileVideo.name);
+                const uploadTask = uploadBytesResumable(videoRef, fileVideo);
+
+                uploadTask.on('state_changed', 
+                    (snapshot) => {
+                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        pBar.style.width = progress + "%";
+                    }, 
+                    (error) => alert("Error subiendo video"), 
+                    async () => {
+                        // C. Guardar en Base de Datos
+                        const videoUrl = await getDownloadURL(uploadTask.snapshot.ref);
+                        
+                        await addDoc(collection(db, "videos"), {
+                            type: 'file',
+                            src: videoUrl,
+                            title: title,
+                            thumb: thumbUrl,
+                            category: cat,
+                            date: Date.now()
+                        });
+                        
+                        pText.innerText = "¡Completado!";
+                        setTimeout(() => window.closeAdmin(), 1000);
+                    }
+                );
+            } catch(e) { console.error(e); alert("Error general"); }
+        };
+
+        window.deleteVideo = async (id) => {
+            if(confirm("Borrar?")) await deleteDoc(doc(db, "videos", id));
+        };
+
+        // --- REPRODUCTOR HÍBRIDO ---
+        window.openPlayer = (video) => {
+            const wrapper = document.getElementById('videoWrapper');
+            wrapper.innerHTML = '';
+
+            if(video.type === 'youtube') {
+                wrapper.innerHTML = `<iframe src="https://www.youtube.com/embed/${video.src}?autoplay=1&rel=0" allow="autoplay" allowfullscreen></iframe>`;
+            } else {
+                // Video propio (HTML5)
+                wrapper.innerHTML = `<video src="${video.src}" controls autoplay playsinline></video>`;
+            }
             document.getElementById('playerOverlay').classList.add('open');
-        }
+        };
 
         window.closePlayer = () => {
             document.getElementById('playerOverlay').classList.remove('open');
-            document.getElementById('iframeContainer').innerHTML = ''; // Detener video
-        }
+            document.getElementById('videoWrapper').innerHTML = '';
+        };
 
     </script>
 </body>
