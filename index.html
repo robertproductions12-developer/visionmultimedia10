@@ -3,393 +3,471 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>DepCom | Streaming & Media</title>
+    <title>DepCom | Streaming Network</title>
+    
+    <!-- Iconos y Fuentes -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&display=swap" rel="stylesheet">
     
     <style>
-        /* --- ESTILOS VISUALES (TU DISEÑO) --- */
-        :root { --primary: #2962ff; --primary-dark: #0039cb; --bg-dark: #050505; --card-bg: rgba(20, 20, 20, 0.7); --glass: rgba(255, 255, 255, 0.05); --border: rgba(255, 255, 255, 0.1); --text-main: #ffffff; --text-sec: #b0b0b0; }
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { background-color: var(--bg-dark); color: var(--text-main); font-family: 'Montserrat', sans-serif; overflow-x: hidden; padding-bottom: 90px; }
-        .background-fx { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; background: radial-gradient(circle at 50% 100%, #0d47a1, #002171 40%, #000000 90%); animation: breathe 8s ease-in-out infinite alternate; }
-        @keyframes breathe { 0% { opacity: 0.7; } 100% { opacity: 1; } }
+        /* --- CORE STYLES --- */
+        :root { 
+            --primary: #2962ff; 
+            --primary-glow: rgba(41, 98, 255, 0.6);
+            --bg-dark: #050505; 
+            --card-bg: #111; 
+            --text-main: #ffffff; 
+            --text-sec: #b0b0b0; 
+        }
         
-        /* HEADER */
-        header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 50; backdrop-filter: blur(15px); background: rgba(0,0,0,0.6); border-bottom: 1px solid var(--border); }
-        .logo { font-weight: 800; font-size: 1.5rem; color: #fff; letter-spacing: 1px; }
-        .logo span { color: var(--primary); text-shadow: 0 0 10px var(--primary); }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body { 
+            background-color: var(--bg-dark); 
+            color: var(--text-main); 
+            font-family: 'Montserrat', sans-serif; 
+            overflow-x: hidden; 
+            padding-bottom: 50px; 
+        }
 
-        /* HERO */
-        .hero { padding: 25px 20px 10px; }
-        .hero h1 { font-size: 2rem; line-height: 1.1; margin-bottom: 20px; }
-        .hero span { color: var(--primary); text-shadow: 0 0 15px rgba(41, 98, 255, 0.6); }
-        .search-box { background: var(--glass); border-radius: 30px; padding: 12px 20px; display: flex; align-items: center; border: 1px solid var(--border); margin-bottom: 20px; transition: 0.3s; }
-        .search-box input { background: transparent; border: none; color: white; width: 100%; margin-left: 10px; outline: none; font-family: inherit; font-size: 1rem; }
+        /* Scrollbar Personalizado */
+        ::-webkit-scrollbar { width: 8px; background: #000; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
 
-        /* GRID */
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; padding: 0 20px; perspective: 1000px; min-height: 300px; }
-        .loading-text { color: var(--text-sec); text-align: center; grid-column: 1 / -1; margin-top: 50px; }
+        /* Fondo Animado */
+        .background-fx { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; 
+            background: radial-gradient(circle at 50% 120%, #1a237e, #000 60%);
+            animation: pulse 10s infinite alternate;
+        }
+        @keyframes pulse { 0% { opacity: 0.5; } 100% { opacity: 0.8; } }
 
-        /* CARD */
-        .card { background: var(--card-bg); border-radius: 16px; overflow: hidden; position: relative; height: 320px; border: 1px solid var(--border); transition: transform 0.1s ease-out, box-shadow 0.3s; cursor: pointer; transform-style: preserve-3d; display: flex; flex-direction: column; justify-content: flex-end; }
-        .card:hover { box-shadow: 0 15px 30px rgba(0,0,0,0.5); border-color: var(--primary); z-index: 10; }
-        .card-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: 0.5s; opacity: 0.8; z-index: -1; filter: grayscale(20%); }
-        .card:hover .card-img { transform: scale(1.1); opacity: 0.5; filter: grayscale(0%); }
-        .card-content { padding: 20px; background: linear-gradient(to top, rgba(0,0,0,0.95), transparent); transform: translateZ(20px); }
-        .card-cat { color: var(--primary); font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
-        .card-title { font-size: 1.2rem; font-weight: 700; margin: 5px 0; line-height: 1.2; }
-        .card-desc { font-size: 0.8rem; color: var(--text-sec); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-        .play-btn-overlay { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) translateZ(40px) scale(0.8); background: rgba(41, 98, 255, 0.9); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; opacity: 0; transition: 0.3s; box-shadow: 0 0 20px var(--primary); }
-        .card:hover .play-btn-overlay { opacity: 1; transform: translate(-50%, -50%) translateZ(40px) scale(1); }
-        .delete-btn { position: absolute; top: 10px; right: 10px; background: red; color: white; padding: 5px; border-radius: 50%; cursor: pointer; z-index: 50; display: none; } 
-        body.is-admin .delete-btn { display: block; }
+        /* HEADER & NAV */
+        header { 
+            padding: 15px 5%; 
+            display: flex; justify-content: space-between; align-items: center; 
+            position: sticky; top: 0; z-index: 100; 
+            background: rgba(5, 5, 5, 0.9); backdrop-filter: blur(10px); 
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .logo { font-weight: 900; font-size: 1.6rem; letter-spacing: -1px; color: #fff; }
+        .logo span { color: var(--primary); text-shadow: 0 0 15px var(--primary); }
+
+        /* CATEGORY MENU (SCROLL HORIZONTAL) */
+        .category-bar {
+            display: flex; gap: 15px; overflow-x: auto; padding: 15px 5%;
+            background: rgba(0,0,0,0.5); white-space: nowrap;
+            scrollbar-width: none; /* Firefox */
+        }
+        .category-bar::-webkit-scrollbar { display: none; } /* Chrome */
+        
+        .cat-chip {
+            padding: 8px 20px; border-radius: 20px; background: #1a1a1a; 
+            color: #aaa; font-size: 0.85rem; font-weight: 600; cursor: pointer;
+            transition: 0.3s; border: 1px solid transparent;
+        }
+        .cat-chip:hover { color: white; background: #222; }
+        .cat-chip.active { 
+            background: var(--primary); color: white; 
+            box-shadow: 0 0 15px var(--primary-glow); border-color: var(--primary);
+        }
+
+        /* HERO SECTION */
+        .hero { padding: 40px 5% 20px; text-align: center; }
+        .hero h1 { font-size: 2.5rem; margin-bottom: 10px; line-height: 1.1; }
+        .hero p { color: var(--text-sec); font-size: 1rem; max-width: 600px; margin: 0 auto 30px; }
+
+        /* GRID SYSTEM */
+        .grid { 
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+            gap: 30px; padding: 20px 5%; min-height: 400px; 
+        }
+
+        /* VIDEO CARD PRO */
+        .card { 
+            background: var(--card-bg); border-radius: 12px; overflow: hidden; 
+            position: relative; height: 340px; cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.5); border-color: var(--primary); }
+        
+        .card-img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; opacity: 0.7; }
+        .card:hover .card-img { transform: scale(1.1); opacity: 0.4; }
+        
+        .card-content { 
+            position: absolute; bottom: 0; left: 0; width: 100%; padding: 20px;
+            background: linear-gradient(to top, #000 10%, transparent); 
+        }
+        .card-tag { 
+            background: var(--primary); color: white; padding: 3px 8px; 
+            font-size: 0.6rem; border-radius: 4px; font-weight: 800; 
+            text-transform: uppercase; display: inline-block; margin-bottom: 8px;
+        }
+        .card-title { font-size: 1.1rem; font-weight: 700; line-height: 1.3; margin-bottom: 5px; }
+        .play-icon {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.5);
+            font-size: 3rem; color: white; opacity: 0; transition: 0.3s;
+            text-shadow: 0 0 20px black;
+        }
+        .card:hover .play-icon { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+
+        /* NOSOTROS & CONTACTO */
+        .info-section {
+            background: #0a0a0a; padding: 60px 5%; margin-top: 50px;
+            border-top: 1px solid #222;
+        }
+        .info-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px;
+        }
+        .info-box h3 { color: var(--primary); margin-bottom: 15px; font-size: 1.5rem; }
+        .info-box p { color: #888; line-height: 1.6; font-size: 0.95rem; }
+        
+        .social-links { display: flex; gap: 15px; margin-top: 20px; }
+        .social-btn {
+            width: 40px; height: 40px; border-radius: 50%; background: #222;
+            display: flex; align-items: center; justify-content: center;
+            color: white; text-decoration: none; transition: 0.3s;
+            font-size: 1.2rem;
+        }
+        .social-btn:hover { background: var(--primary); transform: translateY(-3px); }
 
         /* FOOTER */
-        .footer-social { text-align: center; padding: 20px; margin-bottom: 20px; border-top: 1px solid var(--border); background: #020202; }
-        .social-icons { display: flex; justify-content: center; gap: 25px; margin-top: 15px; }
-        .social-link { color: #fff; transition: 0.3s; }
-        .floating-nav { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(5, 5, 5, 0.95); backdrop-filter: blur(20px); padding: 12px 30px; border-radius: 40px; display: flex; gap: 35px; border: 1px solid var(--border); box-shadow: 0 10px 40px rgba(0,0,0,0.9); z-index: 90; }
-        .nav-item { color: #555; cursor: pointer; transition: 0.3s; }
-        .nav-item.active { color: var(--primary); text-shadow: 0 0 15px var(--primary); }
+        footer { text-align: center; padding: 30px; color: #555; font-size: 0.8rem; background: #000; }
 
-        /* PLAYER MODAL */
-        .player-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 300; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.4s ease-in-out; }
-        .player-modal.active { transform: translateY(0); }
-        .video-container { flex: 1; background: #000; position: relative; display: flex; align-items: center; justify-content: center; }
-        .video-container iframe { width: 100%; height: 100%; border: none; }
-        .player-info { padding: 25px; background: #080808; border-top: 1px solid var(--primary-dark); }
-        .controls-top { position: absolute; top: 0; left: 0; width: 100%; padding: 20px; display: flex; justify-content: space-between; z-index: 10; background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent); }
-
-        /* ADMIN PANEL REAL */
-        .admin-trigger { position: fixed; bottom: 30px; right: 20px; z-index: 100; opacity: 0.5; cursor: pointer; transition: 0.3s; background: var(--bg-dark); border-radius: 50%; padding: 10px; border: 1px solid var(--border); }
-        .admin-trigger:hover { opacity: 1; border-color: var(--primary); }
-        
-        .admin-panel {
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.9);
-            width: 90%; max-width: 400px; background: #111; border: 1px solid var(--primary);
-            padding: 30px; border-radius: 15px; z-index: 400; box-shadow: 0 0 50px rgba(0,0,0,0.9);
-            opacity: 0; visibility: hidden; transition: 0.3s;
+        /* ADMIN MODAL */
+        .admin-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); backdrop-filter: blur(5px);
+            z-index: 200; display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none; transition: 0.3s;
         }
-        .admin-panel.active { opacity: 1; visibility: visible; transform: translate(-50%, -50%) scale(1); }
-        .admin-panel h3 { margin-bottom: 20px; color: var(--primary); text-align: center; }
-        .input-group { margin-bottom: 15px; }
-        .input-group label { display: block; font-size: 0.8rem; color: #aaa; margin-bottom: 5px; }
-        .admin-panel input { width: 100%; background: #222; border: 1px solid #333; color: white; padding: 12px; border-radius: 8px; outline: none; }
-        .btn-main { width: 100%; padding: 12px; background: var(--primary); border: none; color: white; font-weight: bold; border-radius: 8px; cursor: pointer; transition: 0.3s; margin-top: 10px; }
-        .btn-main:hover { background: var(--primary-dark); }
-        .btn-sec { background: transparent; border: 1px solid #333; margin-top: 10px; color: #888; }
-        .close-admin { position: absolute; top: 15px; right: 15px; cursor: pointer; color: #666; }
+        .admin-modal.active { opacity: 1; pointer-events: all; }
+        .admin-box {
+            background: #151515; width: 90%; max-width: 450px; padding: 30px;
+            border-radius: 15px; border: 1px solid #333; position: relative;
+        }
+        .close-btn { position: absolute; top: 15px; right: 15px; cursor: pointer; color: #666; }
         
-        /* ESTADOS DEL ADMIN */
-        #loginForm, #uploadForm { display: none; }
+        input, select {
+            width: 100%; background: #222; border: 1px solid #333; color: white;
+            padding: 12px; margin-bottom: 15px; border-radius: 6px; outline: none;
+        }
+        input:focus, select:focus { border-color: var(--primary); }
+        
+        .btn-primary {
+            width: 100%; background: var(--primary); border: none; padding: 12px;
+            color: white; font-weight: bold; border-radius: 6px; cursor: pointer;
+        }
+        .btn-primary:hover { background: #1a4bd6; }
+        
+        .admin-float-btn {
+            position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px;
+            background: #222; border-radius: 50%; display: flex; align-items: center; 
+            justify-content: center; cursor: pointer; border: 1px solid #333; z-index: 90;
+            opacity: 0.3; transition: 0.3s;
+        }
+        .admin-float-btn:hover { opacity: 1; border-color: var(--primary); }
+
+        /* VIDEO PLAYER */
+        .player-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; z-index: 300; display: flex; flex-direction: column;
+            transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .player-overlay.open { transform: translateY(0); }
+        .iframe-container { flex: 1; width: 100%; display: flex; align-items: center; justify-content: center; }
+        .iframe-container iframe { width: 100%; height: 100%; max-width: 1200px; max-height: 80vh; border:none; }
+        .player-controls { padding: 20px; display: flex; justify-content: space-between; align-items: center; }
+
     </style>
 </head>
 <body>
 
     <div class="background-fx"></div>
 
+    <!-- HEADER -->
     <header>
         <div class="logo">DEP<span>COM</span></div>
-        <i class="material-icons" style="color: #fff; cursor: pointer;">menu</i>
+        <!-- Enlaces directos a redes en el header (opcional) -->
+        <div style="display:flex; gap:10px;">
+            <a href="https://instagram.com" target="_blank" style="color:white;"><i class="fab fa-instagram"></i></a>
+            <a href="https://youtube.com" target="_blank" style="color:white;"><i class="fab fa-youtube"></i></a>
+        </div>
     </header>
 
+    <!-- MENÚ DE CATEGORÍAS -->
+    <div class="category-bar" id="categoryBar">
+        <div class="cat-chip active" onclick="filterContent('all', this)">Todo</div>
+        <div class="cat-chip" onclick="filterContent('Documentales', this)">Documentales</div>
+        <div class="cat-chip" onclick="filterContent('Cortometrajes', this)">Cortometrajes</div>
+        <div class="cat-chip" onclick="filterContent('Programas', this)">Programas</div>
+        <div class="cat-chip" onclick="filterContent('Transmisiones', this)">Transmisiones</div>
+        <div class="cat-chip" onclick="filterContent('Podcast', this)">Podcast</div>
+        <div class="cat-chip" onclick="filterContent('Radio', this)">Radio Visual</div>
+    </div>
+
+    <!-- HERO -->
     <div class="hero">
-        <div class="search-box">
-            <i class="material-icons" style="color: var(--primary);">search</i>
-            <input type="text" id="searchInput" placeholder="Buscar contenido...">
-        </div>
-        <h1>Descubre tus <br><span>Historias</span></h1>
+        <h1>Historias que <br><span style="color:var(--primary)">Conectan</span></h1>
+        <p>La plataforma definitiva de streaming multimedia.</p>
     </div>
 
-    <!-- GRID DE VIDEOS DINÁMICO -->
+    <!-- GRID DE CONTENIDO -->
     <div class="grid" id="contentGrid">
-        <div class="loading-text">Cargando videos desde la nube...</div>
+        <p style="text-align:center; width:100%; color:#555;">Cargando contenido...</p>
     </div>
 
-    <footer class="footer-social">
-        <div class="social-icons">
-            <a href="#" class="social-link"><i class="material-icons">facebook</i></a>
-            <a href="#" class="social-link"><i class="material-icons">smart_display</i></a>
+    <!-- SECCIÓN NOSOTROS / CONTACTO -->
+    <section class="info-section">
+        <div class="info-grid">
+            <div class="info-box">
+                <h3>Sobre DepCom</h3>
+                <p>Somos una productora audiovisual dedicada a contar historias con impacto. Desde documentales profundos hasta entretenimiento ligero, DepCom conecta creadores con audiencias globales a través de tecnología de streaming de vanguardia.</p>
+            </div>
+            <div class="info-box">
+                <h3>Conecta con Nosotros</h3>
+                <p>¿Tienes un proyecto? ¿Quieres publicitar con nosotros?</p>
+                <p>📧 contacto@depcom.com</p>
+                <div class="social-links">
+                    <a href="#" class="social-btn"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-btn"><i class="fab fa-tiktok"></i></a>
+                    <a href="#" class="social-btn"><i class="fab fa-youtube"></i></a>
+                    <a href="#" class="social-btn"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-btn"><i class="fab fa-twitter"></i></a> <!-- X icon -->
+                </div>
+            </div>
         </div>
-        <p style="color: #444; font-size: 0.7rem; margin-top: 20px;">© 2024 DepCom App.</p>
+    </section>
+
+    <footer>
+        © 2024 DepCom Streaming & Media. Todos los derechos reservados.
     </footer>
 
-    <!-- BOTÓN ADMIN -->
-    <div class="admin-trigger" id="adminTrigger">
-        <i class="material-icons" style="font-size: 24px; color: #fff;">lock</i>
+    <!-- BOTÓN FLOTANTE ADMIN -->
+    <div class="admin-float-btn" onclick="openAdmin()">
+        <i class="material-icons" style="color:white;">settings</i>
     </div>
 
-    <!-- PANEL ADMIN (Login y Subida) -->
-    <div class="admin-panel" id="adminPanel">
-        <i class="material-icons close-admin" id="closeAdmin">close</i>
-        
-        <!-- Formulario Login -->
-        <div id="loginForm">
-            <h3>Acceso Admin</h3>
-            <div class="input-group">
-                <label>Correo Electrónico</label>
-                <input type="email" id="emailInput" placeholder="admin@depcom.com">
+    <!-- MODAL ADMIN -->
+    <div class="admin-modal" id="adminModal">
+        <div class="admin-box">
+            <i class="material-icons close-btn" onclick="closeAdmin()">close</i>
+            
+            <!-- VISTA LOGIN -->
+            <div id="loginView">
+                <h3 style="color:var(--primary); margin-bottom:20px; text-align:center;">Acceso Creadores</h3>
+                <input type="email" id="email" placeholder="Correo administrativo">
+                <input type="password" id="password" placeholder="Contraseña">
+                <button class="btn-primary" onclick="handleLogin()">ENTRAR AL SISTEMA</button>
             </div>
-            <div class="input-group">
-                <label>Contraseña</label>
-                <input type="password" id="passInput" placeholder="******">
-            </div>
-            <button class="btn-main" id="btnLogin">ENTRAR</button>
-            <p id="loginMsg" style="color: red; font-size: 0.8rem; text-align: center; margin-top: 10px;"></p>
-        </div>
 
-        <!-- Formulario Subir Video -->
-        <div id="uploadForm">
-            <h3>Nuevo Video</h3>
-            <p style="color:#aaa; font-size:0.8rem; margin-bottom:15px; text-align:center;">Pega el enlace de YouTube, nosotros traemos la foto y el título.</p>
-            <div class="input-group">
-                <input type="text" id="youtubeUrl" placeholder="https://www.youtube.com/watch?v=...">
+            <!-- VISTA SUBIR VIDEO -->
+            <div id="uploadView" style="display:none;">
+                <h3 style="color:var(--primary); margin-bottom:10px;">Publicar Contenido</h3>
+                
+                <label style="font-size:0.8rem; color:#888;">Categoría</label>
+                <select id="videoCategory">
+                    <option value="Documentales">Documentales</option>
+                    <option value="Cortometrajes">Cortometrajes</option>
+                    <option value="Programas">Programas</option>
+                    <option value="Transmisiones">Transmisiones</option>
+                    <option value="Podcast">Podcast</option>
+                    <option value="Radio">Radio Visual</option>
+                </select>
+
+                <label style="font-size:0.8rem; color:#888;">Enlace de YouTube</label>
+                <input type="text" id="videoUrl" placeholder="https://youtu.be/...">
+
+                <button class="btn-primary" id="btnUpload" onclick="uploadVideo()">PUBLICAR AHORA</button>
+                <button onclick="logout()" style="background:none; border:none; color:red; margin-top:10px; cursor:pointer; width:100%;">Cerrar Sesión</button>
+                
+                <p id="statusMsg" style="text-align:center; font-size:0.8rem; margin-top:10px; color:#aaa;"></p>
             </div>
-            <button class="btn-main" id="btnSave">GUARDAR VIDEO</button>
-            <button class="btn-main btn-sec" id="btnLogout">Cerrar Sesión</button>
-            <p id="uploadMsg" style="color: var(--primary); font-size: 0.8rem; text-align: center; margin-top: 10px;"></p>
         </div>
     </div>
 
     <!-- REPRODUCTOR -->
-    <div class="player-modal" id="playerModal">
-        <div class="controls-top">
-            <i class="material-icons" style="color:white; font-size:30px; cursor:pointer;" onclick="closePlayer()">keyboard_arrow_down</i>
-            <span style="color:var(--primary); font-weight:bold;">Reproduciendo</span>
+    <div class="player-overlay" id="playerOverlay">
+        <div class="player-controls">
+            <i class="material-icons" style="font-size:30px; color:white; cursor:pointer;" onclick="closePlayer()">keyboard_arrow_down</i>
+            <span style="color:var(--primary); font-weight:bold;">REPRODUCIENDO</span>
+            <div style="width:30px;"></div>
         </div>
-        <div class="video-container" id="videoContainer"></div>
-        <div class="player-info">
-            <h2 id="modalTitle">Título</h2>
-            <span id="modalCat" style="color:var(--primary); font-size:0.8rem; text-transform:uppercase;">YouTube</span>
-            <p id="modalDesc" style="margin-top: 15px;">Descripción</p>
-        </div>
+        <div class="iframe-container" id="iframeContainer"></div>
     </div>
 
-    <!-- LÓGICA FIREBASE -->
+    <!-- JAVASCRIPT (LÓGICA) -->
     <script type="module">
-        // --------------------------------------------------------------
-        // 1. CONFIGURACIÓN (PEGA AQUÍ TUS LLAVES DE FIREBASE)
-        // --------------------------------------------------------------
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
+        // --- CONFIGURACIÓN (REEMPLAZA ESTO CON TUS DATOS DE FIREBASE) ---
         const firebaseConfig = {
-            // --- PEGA LO QUE COPIASTE DE FIREBASE AQUÍ DENTRO ---
-            apiKey: "AIzaSyCIB1ZTy62DOmez1RKm8-bGOf9Lb8gA0cA",
-            authDomain: "depcom-videos.firebaseapp.com",
-            projectId: "depcom-videos",
-            storageBucket: "depcom-videos.firebasestorage.app",
-            messagingSenderId: "305553483794",
-            appId: "1:305553483794:web:d012684a8631bd453b50cb"
-            // ----------------------------------------------------
+                     apiKey: "AIzaSyCIB1ZTy62DOmez1RKm8-bGOf9Lb8gA0cA",
+                     authDomain: "depcom-videos.firebaseapp.com",
+                     projectId: "depcom-videos",
+                     storageBucket: "depcom-videos.firebasestorage.app",
+                     messagingSenderId: "305553483794",
+                     appId: "1:305553483794:web:d012684a8631bd453b50cb"
         };
 
-        // Inicializar Firebase
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
 
-        // Variables Globales
+        // Variables de Estado
         let allVideos = [];
-        const grid = document.getElementById('contentGrid');
+        let currentFilter = 'all';
 
-        // --------------------------------------------------------------
-        // 2. LECTURA DE VIDEOS (AUTOMÁTICA EN TIEMPO REAL)
-        // --------------------------------------------------------------
+        // --- 1. LECTURA DE DATOS ---
         const q = query(collection(db, "videos"), orderBy("date", "desc"));
         
         onSnapshot(q, (snapshot) => {
             allVideos = [];
+            snapshot.forEach(doc => {
+                allVideos.push({ id: doc.id, ...doc.data() });
+            });
+            renderGrid();
+        });
+
+        // --- 2. RENDERIZADO (CON FILTRO) ---
+        window.renderGrid = () => {
+            const grid = document.getElementById('contentGrid');
             grid.innerHTML = '';
-            
-            if(snapshot.empty) {
-                grid.innerHTML = '<div class="loading-text">No hay videos. Inicia sesión para agregar.</div>';
+
+            const filtered = currentFilter === 'all' 
+                ? allVideos 
+                : allVideos.filter(v => v.category === currentFilter);
+
+            if(filtered.length === 0) {
+                grid.innerHTML = '<p style="grid-column:1/-1; text-align:center; color:#555;">No hay contenido en esta categoría.</p>';
                 return;
             }
 
-            snapshot.forEach((doc) => {
-                allVideos.push({ id: doc.id, ...doc.data() });
-            });
-            renderCards(allVideos);
-        }, (error) => {
-            console.error("Error leyendo videos:", error);
-            grid.innerHTML = '<div class="loading-text">Error de conexión. Verifica las llaves de Firebase.</div>';
-        });
-
-        function renderCards(videos) {
-            grid.innerHTML = '';
-            videos.forEach(video => {
+            filtered.forEach(video => {
                 const card = document.createElement('div');
                 card.className = 'card';
-                
-                // Botón de borrar (solo visible si eres admin)
-                const deleteBtn = document.createElement('i');
-                deleteBtn.className = 'material-icons delete-btn';
-                deleteBtn.innerText = 'delete';
-                deleteBtn.onclick = (e) => { e.stopPropagation(); deleteVideo(video.id); };
+                card.onclick = () => playVideo(video.youtubeId);
+
+                // Botón borrar solo para admin
+                let deleteHtml = '';
+                if(auth.currentUser) {
+                    deleteHtml = `<button onclick="event.stopPropagation(); deleteItem('${video.id}')" style="position:absolute; top:10px; right:10px; background:red; color:white; border:none; padding:5px; border-radius:50%; z-index:10; cursor:pointer;"><i class="material-icons">delete</i></button>`;
+                }
 
                 card.innerHTML = `
-                    <img src="${video.img}" class="card-img" alt="${video.title}" loading="lazy">
-                    <div class="play-btn-overlay"><i class="material-icons" style="color:white;">play_arrow</i></div>
+                    <img src="${video.img}" class="card-img" alt="cover">
+                    <i class="material-icons play-icon">play_circle_outline</i>
+                    ${deleteHtml}
                     <div class="card-content">
-                        <div class="card-cat">VIDEO</div>
+                        <span class="card-tag">${video.category || 'General'}</span>
                         <div class="card-title">${video.title}</div>
-                        <div class="card-desc">${video.desc}</div>
                     </div>
                 `;
-                
-                card.appendChild(deleteBtn);
-                card.onclick = () => openPlayer(video);
-                
-                // Efecto 3D
-                card.addEventListener('mousemove', (e) => handleTilt(e, card));
-                card.addEventListener('mouseleave', () => resetTilt(card));
-                
                 grid.appendChild(card);
             });
         }
 
-        // --------------------------------------------------------------
-        // 3. LÓGICA DE ADMINISTRADOR (LOGIN Y GUARDADO)
-        // --------------------------------------------------------------
-        
-        // Manejo de UI del Admin
-        const adminPanel = document.getElementById('adminPanel');
-        const loginForm = document.getElementById('loginForm');
-        const uploadForm = document.getElementById('uploadForm');
-        
-        document.getElementById('adminTrigger').onclick = () => adminPanel.classList.add('active');
-        document.getElementById('closeAdmin').onclick = () => adminPanel.classList.remove('active');
+        // --- 3. FUNCIONES DE FILTRO ---
+        window.filterContent = (cat, element) => {
+            currentFilter = cat;
+            
+            // Actualizar estilo visual de los chips
+            document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
+            element.classList.add('active');
+            
+            renderGrid();
+        }
 
-        // Detectar si el usuario está logueado
+        // --- 4. FUNCIONES ADMIN ---
+        window.openAdmin = () => document.getElementById('adminModal').classList.add('active');
+        window.closeAdmin = () => document.getElementById('adminModal').classList.remove('active');
+
+        // Escuchar estado de login
         onAuthStateChanged(auth, (user) => {
-            if (user) {
-                // Si hay usuario, mostrar formulario de subida
-                loginForm.style.display = 'none';
-                uploadForm.style.display = 'block';
-                document.body.classList.add('is-admin'); // Habilita botones de borrar
-                document.getElementById('adminTrigger').querySelector('i').innerText = "lock_open";
-                document.getElementById('adminTrigger').querySelector('i').style.color = "var(--primary)";
+            if(user) {
+                document.getElementById('loginView').style.display = 'none';
+                document.getElementById('uploadView').style.display = 'block';
+                renderGrid(); // Re-renderizar para mostrar botones de borrar
             } else {
-                // Si no, mostrar login
-                loginForm.style.display = 'block';
-                uploadForm.style.display = 'none';
-                document.body.classList.remove('is-admin');
-                document.getElementById('adminTrigger').querySelector('i').innerText = "lock";
+                document.getElementById('loginView').style.display = 'block';
+                document.getElementById('uploadView').style.display = 'none';
+                renderGrid(); // Re-renderizar para ocultar botones de borrar
             }
         });
 
-        // Iniciar Sesión
-        document.getElementById('btnLogin').onclick = async () => {
-            const email = document.getElementById('emailInput').value;
-            const pass = document.getElementById('passInput').value;
-            const msg = document.getElementById('loginMsg');
-            
+        window.handleLogin = async () => {
+            const email = document.getElementById('email').value;
+            const pass = document.getElementById('password').value;
             try {
-                msg.innerText = "Verificando...";
                 await signInWithEmailAndPassword(auth, email, pass);
-                msg.innerText = "";
-            } catch (error) {
-                console.error(error);
-                msg.innerText = "Error: Usuario o contraseña incorrectos.";
+            } catch(e) {
+                alert("Error: " + e.message);
             }
         };
 
-        // Cerrar Sesión
-        document.getElementById('btnLogout').onclick = () => signOut(auth);
+        window.logout = () => signOut(auth);
 
-        // GUARDAR VIDEO EN FIREBASE
-        document.getElementById('btnSave').onclick = async () => {
-            const url = document.getElementById('youtubeUrl').value;
-            const btn = document.getElementById('btnSave');
-            const msg = document.getElementById('uploadMsg');
+        window.uploadVideo = async () => {
+            const url = document.getElementById('videoUrl').value;
+            const category = document.getElementById('videoCategory').value;
+            const status = document.getElementById('statusMsg');
 
             if(!url) return;
-
-            // 1. Extraer ID
+            
+            // Extraer ID Youtube
             let videoId = "";
-            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-            const match = url.match(regExp);
+            const match = url.match(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/);
             if (match && match[2].length == 11) videoId = match[2];
-            else { msg.innerText = "Enlace no válido"; return; }
+            else { alert("Link inválido"); return; }
 
-            btn.innerText = "Obteniendo datos...";
-            btn.disabled = true;
-
+            status.innerText = "Obteniendo info...";
+            
             try {
-                // 2. Traer datos de YouTube (Sin API Key, usando Noembed)
-                const response = await fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${videoId}`);
-                const data = await response.json();
+                // Fetch info (sin API key)
+                const res = await fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${videoId}`);
+                const data = await res.json();
 
-                // 3. Guardar en Firestore
-                btn.innerText = "Guardando en nube...";
-                
                 await addDoc(collection(db, "videos"), {
                     youtubeId: videoId,
-                    title: data.title || "Video Nuevo",
-                    // Usar miniatura HQ de YouTube directa
-                    img: `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`, 
-                    desc: data.author_name ? `Video por ${data.author_name}` : "Sin descripción",
-                    date: Date.now() // Para ordenar
+                    title: data.title || "Nuevo Video",
+                    img: `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`, // Mejor calidad de imagen
+                    category: category,
+                    date: Date.now()
                 });
 
-                msg.innerText = "¡Video guardado con éxito!";
-                document.getElementById('youtubeUrl').value = "";
-                setTimeout(() => { msg.innerText = ""; adminPanel.classList.remove('active'); }, 1500);
+                status.innerText = "¡Publicado!";
+                document.getElementById('videoUrl').value = "";
+                setTimeout(() => { status.innerText = ""; window.closeAdmin(); }, 1500);
 
-            } catch (error) {
-                console.error(error);
-                msg.innerText = "Error al guardar. Revisa la consola.";
-            } finally {
-                btn.innerText = "GUARDAR VIDEO";
-                btn.disabled = false;
+            } catch(e) {
+                status.innerText = "Error al subir";
+                console.error(e);
             }
         };
 
-        // BORRAR VIDEO
-        window.deleteVideo = async (id) => {
-            if(confirm("¿Seguro que quieres borrar este video?")) {
-                try {
-                    await deleteDoc(doc(db, "videos", id));
-                } catch (e) {
-                    alert("Error al borrar: " + e.message);
-                }
+        window.deleteItem = async (id) => {
+            if(confirm("¿Eliminar este contenido?")) {
+                await deleteDoc(doc(db, "videos", id));
             }
         }
 
-        // --------------------------------------------------------------
-        // 4. FUNCIONES VISUALES (REPRODUCTOR, BUSCADOR)
-        // --------------------------------------------------------------
-        
-        window.openPlayer = (video) => {
-            document.getElementById('modalTitle').innerText = video.title;
-            document.getElementById('modalDesc').innerText = video.desc;
-            document.getElementById('videoContainer').innerHTML = 
-                `<iframe src="https://www.youtube.com/embed/${video.youtubeId}?autoplay=1&modestbranding=1&rel=0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
-            document.getElementById('playerModal').classList.add('active');
+        // --- 5. REPRODUCTOR ---
+        window.playVideo = (id) => {
+            document.getElementById('iframeContainer').innerHTML = 
+                `<iframe src="https://www.youtube.com/embed/${id}?autoplay=1&modestbranding=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+            document.getElementById('playerOverlay').classList.add('open');
         }
 
         window.closePlayer = () => {
-            document.getElementById('playerModal').classList.remove('active');
-            document.getElementById('videoContainer').innerHTML = '';
+            document.getElementById('playerOverlay').classList.remove('open');
+            document.getElementById('iframeContainer').innerHTML = ''; // Detener video
         }
-
-        document.getElementById('searchInput').onkeyup = (e) => {
-            const query = e.target.value.toLowerCase();
-            const filtered = allVideos.filter(v => v.title.toLowerCase().includes(query));
-            renderCards(filtered);
-        }
-
-        function handleTilt(e, card) {
-            if(window.innerWidth < 768) return;
-            const r = card.getBoundingClientRect();
-            const x = ((e.clientX - r.left) / r.width - 0.5) * 10;
-            const y = ((e.clientY - r.top) / r.height - 0.5) * -10;
-            card.style.transform = `perspective(1000px) rotateX(${y}deg) rotateY(${x}deg) scale(1.02)`;
-        }
-        function resetTilt(card) { card.style.transform = `perspective(1000px) rotate(0) scale(1)`; }
 
     </script>
 </body>
